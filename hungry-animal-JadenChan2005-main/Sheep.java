@@ -39,20 +39,22 @@ public class Sheep extends Actor
         if(Greenfoot.isKeyDown("space")){
             turn(2);
         }
-        
+        eat();
+    }
 
-        
-        // Eat the apple
+    public void eat()
+    {
+    // Eat the apple
         if(isTouching(goodApple.class)){
             removeTouching(goodApple.class);
             MyWorld world = (MyWorld) getWorld();
-            //world.increaseScore();
+            world.increaseScore();
             world.spawnApple();
         }
         if(isTouching(badApple.class)){
             removeTouching(badApple.class);
             MyWorld world = (MyWorld) getWorld();
-            //world.increaseScore();
+            world.decreaseScore();
             world.spawnBadApple();
         }
     }
