@@ -8,26 +8,65 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  */
 public class Sheep extends Actor
 {
-    /**
-     * Act - do whatever the Sheep wants to do. This method is called whenever
-     * the 'Act' or 'Run' button gets pressed in the environment.
-     */
+    GreenfootSound sheepSound = new GreenfootSound("zapsplat_cartoon_animal_lamb_sheep_baa_001_23573.mp3");
+    GreenfootImage[] idleRight = new GreenfootImage[5];
     
-    private boolean isFacingRight = true;
+    GreenfootImage[] idleLeft = new GreenfootImage[5];
+    
+    String facing = "right";
     String name;
+    
+    SimpleTimer animationTimer = new SimpleTimer();
     public Sheep(String name)
     {
         this.name = name;
+        for(int i = 0; i < idleRight.length; i++)
+        {
+            idleRight[i] = new GreenfootImage("images/sheep_animate/idle" + i + ".png");
+        }
+        
+        for(int i = 0; i < idleLeft.length; i++)
+        {
+            idleLeft[i] = new GreenfootImage("images/sheep_animate/idle" + i + ".png");
+            idleLeft[i].mirrorHorizontally();
+        }
+        
+        animationTimer.mark();
+        
+        setImage(idleRight[0]);
     }
+    int imageIndex = 0;
+    public void animateSheep()
+    {
+        if(animationTimer.millisElapsed() < 300)
+        {
+            return;
+        }
+        animationTimer.mark();
+        
+        if(facing.equals("right"))
+        {
+            setImage(idleRight[imageIndex]);
+            imageIndex = (imageIndex + 1) % idleRight.length;
+        }
+        else
+        {
+            setImage(idleLeft[imageIndex]);
+            imageIndex = (imageIndex + 1) % idleLeft.length;
+        }
+       
+    }
+    
+    
     public void act()
     {
         // Add your action code here.
         if(Greenfoot.isKeyDown("a")){
-            isFacingRight = false;
+            facing = "left";
             move(-5);
         }
         if(Greenfoot.isKeyDown("d")){
-            isFacingRight = true;
+            facing = "right";
             move(5);
         }
         if(Greenfoot.isKeyDown("w")){
@@ -40,6 +79,9 @@ public class Sheep extends Actor
             turn(2);
         }
         eat();
+        
+        //animate sheep
+        animateSheep();
     }
 
     public void eat()
@@ -50,6 +92,7 @@ public class Sheep extends Actor
             MyWorld world = (MyWorld) getWorld();
             world.increaseScore();
             world.spawnApple();
+            sheepSound.play();
         }
         if(isTouching(badApple.class)){
             removeTouching(badApple.class);
