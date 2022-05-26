@@ -35,7 +35,9 @@ public class Sheep extends Actor
         
         setImage(idleRight[0]);
     }
+    
     int imageIndex = 0;
+    
     public void animateSheep()
     {
         if(animationTimer.millisElapsed() < 300)
@@ -97,8 +99,8 @@ public class Sheep extends Actor
         if(isTouching(badApple.class)){
             removeTouching(badApple.class);
             MyWorld world = (MyWorld) getWorld();
-            world.decreaseScore();
-            world.spawnBadApple();
+            //world.decreaseScore();
+            world.gameOver();
         }
     }
 }
